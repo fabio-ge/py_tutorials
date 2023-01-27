@@ -130,7 +130,6 @@ The function returns three useful informations stored in a tuple: the secret num
 With these information as arguments we can now invoke the play function, responsible for the central loop of the game.
 Inside this loop the player is being asked to enter a number and the input is validated by the function take_guess that checks the rightness of the input inserted.
 Perhaps the most interesting stuff in this function is that, if the input is wrong, the function call itself recursevely, until a right input is inserted.This is done by this piece of code: return take_guess(max)
-
 If there's something wrong there's a message for asking the player another number between the bounds allowed.
 If the number in input is right the program check if the player has won, otherwise print an hint and decrement the number of trials.
 If no right guess is made until the trials reach 0, the player lose.

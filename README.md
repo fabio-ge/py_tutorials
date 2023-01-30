@@ -15,11 +15,13 @@ So, if this is in your taste, stay with us. To have your appetite even wetter, g
 - [Implementing in python](#implement)
     - [code](#code)
 	- [comment](#comment)
-- binary search and why is involved
-- How to search for something
-	- linear search
-	- binary search
-- How mich does it cost? Alghortims complexity
+- [binary search and why is involved](#bs)
+	- [How to search for something](#how)
+		- linear search
+		- binary search
+	- likelyhood of winning
+	- how to compute with monte carlo method
+- How much does it cost? Alghorithms complexity
     - compute complexity
 	- differences with linear search
 	- a rocket man example (grokking algorithms)
@@ -133,6 +135,23 @@ Perhaps the most interesting stuff in this function is that, if the input is wro
 If there's something wrong there's a message for asking the player another number between the bounds allowed.
 If the number in input is right the program check if the player has won, otherwise print an hint and decrement the number of trials.
 If no right guess is made until the trials reach 0, the player lose.
+
+<span id="bs"></span>
+### **Binary search and why is involved**
+
+In the previuos section we told about how to decide the number of trials available to the player,
+and i promised you to reveal why, to compute this value, i have used the log function.
+Well, the short answer is that there is a strategy that the player can adopt, to certainly win the game, if the number of trials are gretar than log2 of the maximum number allowed.
+
+<span id="how"></span>
+#### **How to search for something**
+Let's see if we can clarify this thing of searching. If you have to search for a number between 1 and 0 which strategy will you adopt? Make sure to have an naswer and then read on.
+I think the brute (or stupid) way of accomplish this task is going in order, a number after the other. So we can check: is the number 1? No,is greater. Ok, is 2? No, is gretare. Ok is 3? And so on. But maybe you would try a smarter approach and your first guess will probably be a number in the middle.
+Is the number 50? No. is smaller. Now, i hope, you wouldn't say is 49, but maybe is the number 25? No is greater. Ok Now we have a really smaller set of number to guess.
+The same for a dictionary. You can search for a word browsing all the pages pf the dictionary in order and see if the searched word is in that page.
+But, if you search for, semantic, is not a real clever approach. So you probabily open the dictionary in a point near the initial letter searched, and then oyu go right or left if the word is before or after in the alfabet.
+Ok, enough for a common sense approach, but very important.
+Now is time to tell you about linear and binary search, the formal implementation of the topics just discussed.
 
 
 

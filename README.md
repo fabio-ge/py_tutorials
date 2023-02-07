@@ -17,8 +17,8 @@ So, if this is in your taste, stay with us. To have your appetite even wetter, g
 	- [comment](#comment)
 - [binary search and why is involved](#bs)
 	- [How to search for something](#how)
-		- linear search
-		- binary search
+		- [linear search](#ls)
+		- [binary search](#bscode)
 	- likelyhood of winning
 	- how to compute with monte carlo method
 - How much does it cost? Alghorithms complexity
@@ -145,13 +145,51 @@ Well, the short answer is that there is a strategy that the player can adopt, to
 
 <span id="how"></span>
 #### **How to search for something**
-Let's see if we can clarify this thing of searching. If you have to search for a number between 1 and 0 which strategy will you adopt? Make sure to have an naswer and then read on.
+Let's see if we can clarify this thing of searching. If you have to search for a number between 1 and 100 which strategy will you adopt? Make sure to have an answer and then read on.
 I think the brute (or stupid) way of accomplish this task is going in order, a number after the other. So we can check: is the number 1? No,is greater. Ok, is 2? No, is gretare. Ok is 3? And so on. But maybe you would try a smarter approach and your first guess will probably be a number in the middle.
 Is the number 50? No. is smaller. Now, i hope, you wouldn't say is 49, but maybe is the number 25? No is greater. Ok Now we have a really smaller set of number to guess.
-The same for a dictionary. You can search for a word browsing all the pages pf the dictionary in order and see if the searched word is in that page.
-But, if you search for, semantic, is not a real clever approach. So you probabily open the dictionary in a point near the initial letter searched, and then oyu go right or left if the word is before or after in the alfabet.
-Ok, enough for a common sense approach, but very important.
+The same for a dictionary. You can search for a word browsing all the pages of the dictionary in order and see if the searched word is in that page.
+But, if the word you are searching is, for example, "semantic", is not a real clever approach. So you'll probabily open the dictionary in a point near the initial letter searched, and then you go right or left if the word is before or after in the alfabet.
+Ok, that's enough for a common sense approach, but still very important, anyway.
 Now is time to tell you about linear and binary search, the formal implementation of the topics just discussed.
+
+<span id="ls"></span>
+#### **linear search**
+
+There' s no particular mistery in linear search. Suppose you have an array of number and you must search for a value. Here is the code to do this.
+
+
+```python
+def ls(array,search_value):
+	for ar_index,ar_value in enumerate(array):
+		if ar_value == search_value:
+			return ar_index
+	return -1
+
+def main():
+	ar = range(1,101)
+	print("Searching a value between 1 and 100")
+	search_val = int(input("Give me a value for which you want to search> "))
+	## i assume the input is valid
+	found_index = ls(ar,search_val)
+	if found_index > -1:
+		print(f"The searched value is at index {found_index}")
+	else:
+		print("Value not found")
+
+if __name__ == '__main__':
+	main()
+
+```
+
+The ls function, responsible for the search, is really straightforward, and maybe a little stupid. It scans the number of an array one after the other, and make a comparison. If the check results in a success comparison, it returns the index of the position of the value in the array, otherwise, if the end of the array is reached, a main convention for the searching function suggest to return a -1, that is to say "i have not found the value".
+This simple program is only for explanation purposes and if we took count of the number of trials in which the function find the searched value it will be the number of numbers before the searched values. Not really the more convenient way to search. And now, for something completely different we introduce a friend of mine...
+
+#### **binary search**
+
+I prefer to introduce first the code.
+
+
 
 
 

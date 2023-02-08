@@ -19,7 +19,7 @@ So, if this is in your taste, stay with us. To have your appetite even wetter, g
 	- [How to search for something](#how)
 		- [linear search](#ls)
 		- [binary search](#bscode)
-	- likelyhood of winning
+	- [likelyhood of winning](#prob)
 	- how to compute with monte carlo method
 - How much does it cost? Alghorithms complexity
     - compute complexity
@@ -183,11 +183,43 @@ if __name__ == '__main__':
 ```
 
 The ls function, responsible for the search, is really straightforward, and maybe a little stupid. It scans the number of an array one after the other, and make a comparison. If the check results in a success comparison, it returns the index of the position of the value in the array, otherwise, if the end of the array is reached, a main convention for the searching function suggest to return a -1, that is to say "i have not found the value".
-This simple program is only for explanation purposes and if we took count of the number of trials in which the function find the searched value it will be the number of numbers before the searched values. Not really the more convenient way to search. And now, for something completely different we introduce a friend of mine...
+This simple program is only for explanation purposes and if we took count of the number of trials in which the function find the searched value it will be the number of numbers before the searched values. Not really the more convenient way to search. And now, for something completely different, I introduce a friend of mine...
 
 #### **binary search**
 
-I prefer to introduce first the code.
+I prefer to introduce first the code
+
+```python
+def bs(ar,val):
+	lower,upper = (0,len(ar)-1)
+	while lower <= upper:
+		mid = lower + (upper -lower)//2
+		if ar[mid] == val:
+			return mid
+		elif ar[mid] > val:
+			upper = mid - 1
+		else:
+			lower = mid + 1
+	return -1
+```
+Now that you understand the main point I omit the code in which, simply, I try to execute the code to see that it works
+and i give you only the function.
+The code is simply: assumed that the array in which i have to search for a particular value is ordered (this is essential) i try the value in the middle. If this is the searched value the function returns the index, otherwise, if the value is greater, the function can eliminate all the values on the right and now does't have to examine all the values but only the values on the left.
+If the value is lesser this means that the value searched is in the right part of the array.
+The function continues until the lower value, from which starting the search is greater than the upper value. In that case the while is interrupted and -1 is returned, because the value isn' t in the array.
+To make an example, suppose we want to search if the array [1,2,3,4,5,6,7,8,9,10] has the value 3.
+We start with a lower index of 0 and and upper index of 9.
+The index in the middle is = 4 and the value at that index is 5. The searched value is 3, lesser than 5, so wen can eliminate all the numbers on the right, 5 included.
+So the array now is this [1,2,3,4~~5,6,7,8,9,10~~] and the upper bound become 3. The middle point now is 2, which value is 3. So the function returns the index 2, and this is the answer to our question.
+
+<span id="prob"></span>
+#### **Likelyhood of winning**
+Why all these considerations matters in this simple game?
+The answer is that, in the way the game is considered, is important not to have a big number of trials, because after a certain value, if the player applies binary search, is matematically sure that he'll guess the number.
+So the number of trials are established in a range under the mathematical certainty. It would be nice if the likelywood would be something near 50%, so how we can decide the number of trials?
+If we have numbers from 1 to 10, and we have to guess a number, is 3 a good amount of trials.
+3 is integer part of the base 2 logarithm of 10. What if I give the player 5 trials. If the player applies binary search, with 5 trials, cannot loose. In fact, with the first guess, if wrong, remain 5 numbers to guess. Than, with the second guess, if wrong, remain 2 numbers to guess and 3 other trial. Math clearly says that the player wins. If we limited the number of trials to 3, after 2 trials we remain with 2 numbers and, at the point, the probability is 50% to guess.
+Ok, it sounds nice, but is there another proof that our argomentation is right? Because we are walking in the forest of programming let's try an answer with a monte carlo method.
 
 
 

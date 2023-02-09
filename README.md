@@ -20,7 +20,7 @@ So, if this is in your taste, stay with us. To have your appetite even wetter, g
 		- [linear search](#ls)
 		- [binary search](#bscode)
 	- [likelyhood of winning](#prob)
-	- how to compute with monte carlo method
+	- [how to compute with monte carlo method](#mc)
 - How much does it cost? Alghorithms complexity
     - compute complexity
 	- differences with linear search
@@ -210,17 +210,71 @@ The function continues until the lower value, from which starting the search is 
 To make an example, suppose we want to search if the array [1,2,3,4,5,6,7,8,9,10] has the value 3.
 We start with a lower index of 0 and and upper index of 9.
 The index in the middle is = 4 and the value at that index is 5. The searched value is 3, lesser than 5, so wen can eliminate all the numbers on the right, 5 included.
-So the array now is this [1,2,3,4~~5,6,7,8,9,10~~] and the upper bound become 3. The middle point now is 2, which value is 3. So the function returns the index 2, and this is the answer to our question.
+So the array now is this [1,2,3,4,~~5,6,7,8,9,10~~] and the upper bound become 3. The middle point now is 2, which value is 3. So the function returns the index 2, and this is the answer to our question.
 
 <span id="prob"></span>
 #### **Likelyhood of winning**
 Why all these considerations matters in this simple game?
 The answer is that, in the way the game is considered, is important not to have a big number of trials, because after a certain value, if the player applies binary search, is matematically sure that he'll guess the number.
 So the number of trials are established in a range under the mathematical certainty. It would be nice if the likelywood would be something near 50%, so how we can decide the number of trials?
-If we have numbers from 1 to 10, and we have to guess a number, is 3 a good amount of trials.
-3 is integer part of the base 2 logarithm of 10. What if I give the player 5 trials. If the player applies binary search, with 5 trials, cannot loose. In fact, with the first guess, if wrong, remain 5 numbers to guess. Than, with the second guess, if wrong, remain 2 numbers to guess and 3 other trial. Math clearly says that the player wins. If we limited the number of trials to 3, after 2 trials we remain with 2 numbers and, at the point, the probability is 50% to guess.
+If we have numbers from 1 to 10, and we have to guess a number, is 3 a good amount of trials?
+3 is integer part of the base 2 logarithm of 10. What if I give the player 5 trials. If the player applies binary search, with 5 trials, cannot lose. In fact, with the first guess, if wrong, remain 5 numbers to guess. Than, with the second guess, if wrong, remain 2 numbers to guess and 3 other trial. Math clearly says that the player wins. If we limited the number of trials to 3, after 2 trials we remain with 2 numbers and, at that point, the probability is 50% to guess.
 Ok, it sounds nice, but is there another proof that our argomentation is right? Because we are walking in the forest of programming let's try an answer with a monte carlo method.
 
+<span id="mc"></span>
+#### **how to compute with monte carlo method**
+
+What' s a monte carlo method? To stay at our example, we want to compute a probability but, may be we are not so confident in math, or maybe we are but we want a counterproof also. So we can write a little program that is basically a simulation. Instead of playing only one game our simulation can play 100000 games in a row, and can do these multiple times. If every time the program run 1000000 simulations the results is near the other result we have choosen a sufficient enough amount of repetitions. If the results are really far one from the other, maybe randomness still plays a huge role. To eliminate this component we have to increase the number of games, until, with a sufficient amount, randomness is cut off from the equation. It's the same with a coin toss. If we throw the coin 10 times, the result may be unpredictable, but if we throws the coin 100000 times, the percentage of times the throw gives you a head will be something near 50%.
+Monte Carlo method is really a fascinating method and can be used to compute hard to figure out probability. For example: do you know the monty hall problem? You can choose between three envelope. In one of them you can win a car, in the others two you win nothing. After you have choosen an envelope a person show you the content of one of the others two envelope that doesn' t contain the car. It is better for you to change your choice or to remain with the initial envelope?
+This is not a difficult question, but it is tricky and if you have not thought about it a common sense reasoning will probably lead you to a wrong conclusion. The point is that, with a monte carlo simulation, you can easily figure out the right answer, and writing the code for this is really simple (maybe is a good exercise for the reader). I like when code helps to answer to real world problems :-)
+So, without further ado, here it is the code for the monte carlo simulation for our problem.
+
+```python
+from random import randint
+
+MAX_NUMBER=100
+TRIALS=6
+MATCHES=100000
+ITERATION=20
+
+def bs_with_trials(ar,val):
+	trials = 0
+	lower,upper = (0,len(ar)-1)
+	while lower <= upper:
+		mid = lower + (upper -lower)//2
+		trials += 1
+		if ar[mid] == val:
+			return trials
+		elif ar[mid] > val:
+			upper = mid - 1
+		else:
+			lower = mid + 1
+	## I know in advance that the number is present, so this part is unreachable
+	return trials
+
+def single_match_win():
+	secret_number = randint(1,MAX_NUMBER)
+	array = range(1,MAX_NUMBER)
+	return bs_with_trials(array,secret_number) <= TRIALS
+
+def main():
+	for i in range(ITERATION):
+		win = 0
+		for single_match in range(MATCHES):
+			if single_match_win():
+				win += 1
+			
+		print(f"In this simulation i played {MATCHES} matches, and i win {win} times. I have a {int((win/MATCHES)*100)} % of success.")
+
+
+if __name__ == '__main__':
+	main()
+```
+If you try to run this code you will see that you win with a probability of 62, 63% in which of the 20 simulation. For each simulation you play 100000 games and the results are almost identical, so i can trust these results. This means that if you have to guess a number between 1 and 100, 6 is a good amount of trials. What if the game gives you only 5 trials. The beauty of this method is that, now, we can modify the constant  at the top of the program and immediately see the result. 30% of success, in my opinion too low. So, let's try with 7. 100% of success. Ok, in this case, is too much. So a perfect balance will be 6 trials.
+Remember that the assumption is that the player is using the best possible strategy to guess the number which is binary search.
+Let's do a last experimentation: what if we modify the max number to be 128. The integer part of the base 2 logarithm of 128 is 7 and, if you run your simulations you see that you win 100 times out of 100.
+Why? The answer is simple: 128 is an exact power of 2. So the logarithm will be the exact number of times you have to divide the numbers until you reach the only possible solution. The things are different, for example, with the max number equals to 100 because the base 2 log of 100 is 6,64... which is rounded to 6 by the // python operaton (an integer division).
+So the numbers of trials aren't enough to have a mathematical probability of the 100%. If this is a bug in your game and you have to calculate the number of trials in a different way or a reward to the smart enough player is you decision. The only thing i can say is this: "is not a bug, is a feature" 
 
 
 

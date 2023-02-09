@@ -1,7 +1,7 @@
 from random import randint
 
 MAX_NUMBER=128
-TRIALS=6
+TRIALS=7
 MATCHES=100000
 ITERATION=20
 

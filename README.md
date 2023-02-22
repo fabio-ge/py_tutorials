@@ -26,9 +26,9 @@ So, if this is in your taste, stay with us. To have your appetite even wetter, g
 - [How much does it cost? Alghorithms complexity](#complex)
     - [compute complexity](#compute)
 	- [differences with linear search](#diff)
-- The importance of being ordered
-	- sorting algorithms
-		- selection sort
+- [The importance of being ordered](#order)
+	- [sorting algorithms](#sort)
+		- [selection sort](#selsort)
 		- quick sort
 		- wow, only in one line?
 			- binary search
@@ -304,6 +304,62 @@ What if i tell you that the difference between linear search and binary search i
  The point is that, for small numbers, the two algorithms are both good, but for big numbers there's a huge difference. The other key point is this: with 100 users the difference between the tow is 1 to 100.
  But with a million users the difference has no more this proportion. Is more 1000000 to 1. So the performance ratio between the two algorithm is not constant, increase as the input number become bigger.
 
+ <span id="order"></span>
+
+ ### **The importance of being ordered**
+
+ Now, considering that this is a free digression on topics related to our simple game implementation in python, i think it's time to consider a very important one: order. All discussions made until now, and even our game, is based on the fact that the number i'm searching for is in an ordered list of numbers. The dictionary can be searched in an effective way because is ordered: but what about an unordered list of things? Well, you simply can't make a good search. You have to deal with the one by one kind of searching we told speaking of linear search.
+ Don't be too desperate because there's a family of useful algorithms with the purpose of ordering a list of things, given an ordering criterium.
+ The simplest one is the <. A number a is before a number b if a < b. That's all.
+ We stick with this, but other criteria, like lexycographical, are possible.
+
+<span id="sort"></span>
+ #### **Sorting algorithms**
+As we told few lines ago there are a bunch of algorithms to make order in an unordered collections of any kind of types. The classic example is an array of unordered integers. A good one would be [1,7,3,2,9,4,10,5]. A sorting algorithm will receive this array or list as argument and will return a new array [1,2,3,4,5,7,9,10]
+Sorting algorithms are perhaps the most classical example in the realm of algorithms and there are really a lot of this kind. To mention only a few: bubble sort, selection sort, insertion sort,merge sort, quick sort, heap sort.
+There are difference between them, tipically related to the time complexity (the big O thing), so one is better than others. Bubble sort has a complexity of O(n^2), so is not a suitable choice if you must order a big array.
+In this case may be merge sort is a better choice. In addition some implementations are clearer and more straightforward than others. So, to keep things simple, i chose 2 algorithms of different time complexity and with an easy implementation: selection sort and quick sort.
+Let's begin with the first one.
+
+
+ <span id="selsort"></span>
+#### **Selection sort**
+
+Code first. Now you're an expert, so try to figure out what this code does and then read on.
+
+```python
+def find_min_index(l):
+    """
+        find the index of the min element of the array
+        @input l starting list
+    """
+    min_index = 0
+    min_el = l[0]
+    for i,v in enumerate(l):
+        if v < min_el:
+            min_el = v
+            min_index = i
+
+    return min_index
+
+def selection_sort(l):
+	"""
+		order a list of numbers returning a new array
+		@input l list of numbers
+	"""
+    #make a copy of the list to left the original untouched
+    ordered_list = l[:]
+    for index,el in enumerate(ordered_list):
+        ## new list to examin, start from the new index
+        new_list = ordered_list[index:]
+        new_min_index = find_min_index(new_list)
+        ordered_list[index],ordered_list[index+new_min_index] = ordered_list[index+new_min_index] ,ordered_list[index]
+
+    return ordered_list
+```
+In the first function, find_min_index, the top part between """""" is a documentation string. It tells us what the function does and its parameters.
+In selection sort, first of all, we make a copy, so the originally array is safe. Otherwise ordering the list will also modifiy the original and may be this is not the intended behaviour.
+Then, for every element of the list create a sublist with all the element on the right of the actual element, which is included. In this new_list the min el is searched and then the funcion makes a swap between the actual element and the min one in the new sub_list. At the end of this loop ordered_list is really ordered and can be returned from the function.
 
 <span id="bib"></span>
 ### **Inspiring**   [back to top](#top)

@@ -29,9 +29,9 @@ So, if this is in your taste, stay with us. To have your appetite even wetter, g
 - [The importance of being ordered](#order)
 	- [sorting algorithms](#sort)
 		- [selection sort](#selsort)
-		- quick sort
-		- wow, only in one line?
-			- binary search
+		- [quick sort](#quicksort)
+		- [wow, only in one line?](#oneliners)
+			- [binary search](#bsoneline)
 			- quick sort
 
 <span id="game"></span>
@@ -360,6 +360,127 @@ def selection_sort(l):
 In the first function, find_min_index, the top part between """""" is a documentation string. It tells us what the function does and its parameters.
 In selection sort, first of all, we make a copy, so the originally array is safe. Otherwise ordering the list will also modifiy the original and may be this is not the intended behaviour.
 Then, for every element of the list create a sublist with all the element on the right of the actual element, which is included. In this new_list the min el is searched and then the funcion makes a swap between the actual element and the min one in the new sub_list. At the end of this loop ordered_list is really ordered and can be returned from the function.
+
+<span id="quicksort"></span>
+#### **Quick sort**
+
+Quick sort is one of my favourite algorithms. May be you feel strange in listening to me sayng I have a preference about a specific algorithm, but this is how the world goes, at least for a software developer.
+There are good reasons to love quick sort. It's a linear, simple and pretty fast algorithm. Here, there's the code.
+
+from random import randint
+
+```python
+def quick_sort(l):
+	"""
+		Sort a given list
+		
+		@input l list to order
+	"""
+	if len(l) <= 1:
+		return l
+
+	greater,smaller = [],[]
+	rand_index = randint(0,len(l)-1)
+	pivot = l[rand_index]
+	for i,el in enumerate(l):
+		if el <= pivot: ##if is smaller 
+			if i != rand_index: ## double check is not the pivot
+				smaller.append(el)
+		else:
+			greater.append(el)
+
+	return quick_sort(smaller) + [pivot] + quick_sort(greater)
+```
+
+I hope you really feel is a beautiful algorithm and is not my implementation, is the algorithm itself. The logic is straightforward. If the input list is empty, or is a single element list, the function return the list given as input. In fact, with such a list, you don't have to make order. This is the base case. Otherwise, if the list is at least two elements, you pick a random element from the list and create two new list. The first with the values smaller or equal to the random element, called the pivot. You must pay attention to include all the values equals to the pivot, that are not the pivot. Otherwise you could loss an eventual repetition.
+The other list is composed by the numbers whose value are greater than the pivot.
+Choosing the pivot by picking a random index is a good strategy, because prevent you from going in the worst case if, for example, the list is already ordered and you choose ever the first element to be the pivot.
+At the very last of the function, the return statement, concatenate 3 list. Except for the one composed by the pivot only (be sure to include the pivot in square bracket), the other two aren't simply returned as they are but is returned the result of calling the quick_sort function on the list itself.
+So, to bi clear, is not smaller that it's returned, but quick_sort(smaller). It' s a recursive call.
+We can be sure that is not a infinite loop because, at the top of the function, our base case return without calling itself.
+
+<span id="oneliners"></span>
+#### **Wow, only in one line**
+
+Now, it's time for something completely different. Python is a fun language, in which you can have fun in really creative and unpredictable ways. For me the fun may come from a challenge: rewrite some of the program used before in only one line. And now, you should ask:" Wow, only in one line?". Yes! Isn't amazing?
+Yes, it is, but beware, i dont' recommend this programming style. The code is not much maintenable, and if you must change something often is a pain. Is only a way to have fun and master better python which is, in itself, a very fun thing.
+Let's start with the first program.
+
+<span id="bsoneline"></span>
+#### **Binary search**
+
+Please, before reading on, go to review the original code for this program. Now, let's start with a crucial modification. To write this in one line, we must implement binary search in a recursive way. Here the code.
+```python
+def bs(lista,search_value,low,high):
+	if low > high:
+		return -1
+
+	mid = low + ((high-low)//2)
+	if lista[mid] == search_value:
+		return mid
+	elif lista[mid] > search_value:
+		return bs(lista,search_value,low,mid-1)
+	else:
+		return bs(lista,search_value,mid+1,high)
+```
+The difference is that, now, the logic is recursive, and you pass the low and high index as parameters of the function.
+At the very top there's the base case. If the indexes passed as arguments are crossed (low index is greater than high index) this means the searched element is not in the list, and the function returns -1, as before.
+Now, let's make together a step towarsd oneliner code.
+For this, is important to understand a one line statement to handle if and else. In a return, or assigning a value to a variable, instead of writing an indented piece of code, you car wirte a one line statement. 
+
+```python
+	## usual way
+	if value >= 0:
+		result = 'positive'
+	else:
+		result = 'negative'
+
+	## one line way
+	result = 'positive' if value >= 0 else 'negative'
+```
+
+You can also annidate multiple if statements if you need. So let' s see our function with this one line modification in place.
+
+```python
+def bs(lista,search_value,low,high):
+	if low > high:
+		return -1
+
+	mid = low + ((high-low)//2)
+	return mid if lista[mid] == search_value else (bs(lista,search_value,low,mid-1) if 	lista[mid] > search_value else bs(lista,search_value,mid+1,high)) 
+```
+
+The previous if, elif, else multi rows statement has been translated in a single row. Pretty concise but, as you easily see, not really a readable piece of code. This is why i don't recommend this style except for entertainment purposes.
+So, with this purposes in mind, let's continue. Ready? Sure? Really? Ok, you wanted it.
+Take this one.
+
+```python
+def bs(lista,search_value,low,high):
+	return -1 if low > high else ((low + ((high-low)//2)) if lista[low + ((high-low)//2)] == search_value else (bs(lista,search_value,low,(low + ((high-low)//2))-1) if 	lista[low + ((high-low)//2)] > search_value else bs(lista,search_value,(low + ((high-low)//2))+1,high)))
+```
+
+If you see more than one line i assure you that is only for visualization. This is a one line piece of code but... wait a minute. You are a liar. What about the line with def bs...:?
+May be you don't believe me, but i can shrink also that line. I need only a new concept: lambda function.
+Lambda function is a way to create an anonymous function on the fly. The simplest explanation is this. If you must declare a fuction, instead of doing this:
+```python
+	def sum(x,y):
+		return x +y
+```
+you can do this
+
+```python
+sum = lambda x,y: x+y
+```
+
+With lambda you create a function whose parameters are the variable before ":" and the return statement, implicit, is the statement after the ":".
+With this in mind, finally, the code for our binary search is:
+
+```python
+bs = lambda lista,search_value,low,high: -1 if low > high else ((low + ((high-low)//2)) if lista[low + ((high-low)//2)] == search_value else (bs(lista,search_value,low,(low + ((high-low)//2))-1) if 	lista[low + ((high-low)//2)] > search_value else bs(lista,search_value,(low + ((high-low)//2))+1,high)))
+```
+Wonderful!
+
+
 
 <span id="bib"></span>
 ### **Inspiring**   [back to top](#top)

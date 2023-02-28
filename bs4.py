@@ -1,0 +1,1 @@
+bs = lambda lista,search_value,low,high: -1 if low > high else ((low + ((high-low)//2)) if lista[low + ((high-low)//2)] == search_value else (bs(lista,search_value,low,(low + ((high-low)//2))-1) if 	lista[low + ((high-low)//2)] > search_value else bs(lista,search_value,(low + ((high-low)//2))+1,high)))

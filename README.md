@@ -1,10 +1,10 @@
 # GUESS THE NUMBER AND PYTHON FUN
 
-becoming fluent in a programming language is often a matter of practice and having fun while doing practice.
-So, shall we try with a simple game in which are involved most of the programming features you'll need to use on daily basis.
+Becoming fluent in a programming language is often a matter of practice and having fun while doing practice.
+So, maybe we can try with a simple game in which are involved most of the programming features you'll need to use on daily basis.
 The perfect candidate for this is a game called guess the number; if you don' t know what i'm speaking of, continue on reading.
 The fact is that, even trying to do a simple thing like this, involves a certain number of topics. So, as we don' t have particular constraints for doing this, we can take this opportunity to make interesting digressions on important computer science topics.
-To give only a brief example in this article we'll speak of recursion, binary search, time complexity, sorting algorithms and powerful, one-liners, pieces of code.
+To give only a brief example, in this article we'll speak of recursion, binary search, time complexity, sorting algorithms and powerful, one-liners, pieces of code.
 So, if this is in your taste, stay with us. To have your appetite even wetter, go seeing the list of [inspiring readings](#bib), at the bottom of this article.
 
 <span id="top"></span>
@@ -32,30 +32,30 @@ So, if this is in your taste, stay with us. To have your appetite even wetter, g
 		- [quick sort](#quicksort)
 		- [wow, only in one line?](#oneliners)
 			- [binary search](#bsoneline)
-			- quick sort
+			- [quick sort](#qsoneline)
 
 <span id="game"></span>
 ### **The game**
 
 The simple game chosen for this example is guess the number.
 You must decide an upper bound (depending on this you have a max number of trials) and try to guess a secret number the computer is thinking. The number is between one and the upper bound chosen. For every trial your possibilities decrease by one. If your guessing number is greater than the secret one, the computer says something like "Too high, try a smaller one". Same for the inverse situation with an appropriate message.
-If your numbers of trials go to zero before you guess the number, you lose. If your guess matches the number thought you win. Pretty simple, isn't it?
+If your numbers of trials go to zero before you guess the number, you lose. If your guess matches the number thought, you win. Pretty simple, isn't it?
 
 <span id="matters"></span>
 ### **Why matters in learning a language?**
 
 This is really a simple game, so why do we bother? Simply because it involves a lot of topics you have to master if you want to become proficient in a language.
-First of all you must be able to handle input inserted via a keyboard. Obviously you have to become familiar of the more convenient way to print things on the screen. You need to know how to write conditional instructions and preparing a loop that lasts until a predefined condition is reached.
+First of all, you must be able to handle input inserted via a keyboard. Obviously you have to become familiar to the ways to print things on the screen. You need to know how to write conditional instructions and preparing a loop that lasts until a predefined condition is reached.
 And, as will see in a moment, a lot of more complicated subjects.
 So, the more important thing is that you learn to think computationally in your language of choice, while implementing this simple game.
 
 <span id="top-down"></span>
 ### **Top down approach**
 
-There are, potentially, multiple ways to handle a challenge. Just to be specific i want to afford this particular one starting with a top down approach of the task we must handle for completing our homework.
+There are, potentially, multiple ways to handle a challenge. Just to be specific i want to afford this particular one starting with a top down approach of the task we must handle for completing our work.
 I' ll write a very basic (top-down) instructions just to have a path to follow. This is the global vision of the problem, from my point of view.
 - print some instructions to the player
-- ask the player the max number i can think
+- ask the player the possible max number
 - calculate a secret number between 1 and max
 - calculate the max number of trials for the player
 - start a loop in which
@@ -79,7 +79,7 @@ def usage():
 		""")
 
 def secret_number():
-	max_number = int(input("give/ me the max number i can think of "))
+	max_number = int(input("give me the max number i can think of "))
 	secret_number = randint(1,max_number)
 	tries = int(log(max_number,2))
 	print(f"you have {tries} trials to guess")
@@ -122,19 +122,19 @@ if __name__ == '__main__':
 
 ```
 
-#### **comment**
+#### **Comment**
 
 First of all you see that the code is uncommented. This is not a practice i recommend. In this case i thought it was clearer to have the bare code in one place and write every useful comment in this section. If this section hadn' t been here it would have been a real terrible idea.
-The style of the program is functional. Everything is achieved by function that are joined together in a main function. This very last function is invoked when the program run as a standalone piece of software. If you have a command line in your os, and go to the dir in which this file is saved, you can invoke the program running python guess_the_number.py (supposing you have saved the file with this name and you have the python interpreter already installed). The program immediately recognize that the instruction if __name__ == '__main__' is true, and execute the main function defined above.
+The style of the program is functional. Everything is achieved by functions that are joined together in a main function. This very last function is invoked when the program run as a standalone piece of software. If you have a command line in your os, and go to the dir in which this file is saved, you can invoke the program running python guess_the_number.py (supposing you have saved the file with this name and you have the python interpreter already installed). The program immediately recognize that the instruction "if \_\_name\_\_ == '\_\_main\_\_'" is true, and execute the main function defined above.
 The first step of the main function is to invoke another function that take care of printing some instructions to the user. Nothing too complicated.
 After this, from the main function perspective, another function is invoked, the secret_number.
-This function read an input (by the "input" instruction) via the keyboard and cast it to an integer (int() do the dirty job). Then the function, using the randint imported at the top of the file, calculate a random number and, depending on the max number choosen by the player compute the number of trials available. This is accomplished using the log function from the math library. The import is at the top of the file and the reason why we use the log function will be clear in the next section.
+This function read an input (by the "input" instruction) via the keyboard and cast it to an integer (int() do the dirty job). Then the function, using the randint imported at the top of the file, calculate a random number and, depending on the max number choosen by the player, compute the number of trials available. This is accomplished using the log function from the math library. The import is at the top of the file and the reason why we use the log function will be clear in the next section.
 The function returns three useful informations stored in a tuple: the secret number, the max number of trials and the upper bound.
-With these information as arguments we can now invoke the play function, responsible for the central loop of the game.
+With these informations as arguments we can now invoke the play function, responsible for the central loop of the game.
 Inside this loop the player is being asked to enter a number and the input is validated by the function take_guess that checks the rightness of the input inserted.
 Perhaps the most interesting stuff in this function is that, if the input is wrong, the function call itself recursively, until a right input is inserted.This is done by this piece of code: return take_guess(max)
 If there's something wrong there's a message for asking the player another number between the bounds allowed.
-If the number in input is right the program check if the player has won, otherwise print an hint and decrement the number of trials.
+If the input number is right the program checks if the player has won, otherwise print a hint and decrement the number of trials.
 If no right guess is made until the trials reach 0, the player lose.
 
 <span id="bs"></span>
@@ -155,9 +155,9 @@ Ok, that's enough for a common sense approach, but still very important, anyway.
 Now is time to tell you about linear and binary search, the formal implementation of the topics just discussed.
 
 <span id="ls"></span>
-#### **linear search**
+#### **Linear search**
 
-There' s no particular mistery in linear search. Suppose you have an array of number and you must search for a value. Here is the code to do this.
+There' s no particular mistery in linear search. Suppose you have an array of numbers and you must search for a value. Here is the code to do this.
 
 
 ```python
@@ -183,12 +183,12 @@ if __name__ == '__main__':
 
 ```
 
-The ls function, responsible for the search, is really straightforward, and maybe a little stupid. It scans the number of an array one after the other, and make a comparison. If the check results in a success comparison, it returns the index of the position of the first value in the array, otherwise, if the end of the array is reached, a main convention for the searching function suggest to return a -1, that is to say "i have not found the value".
-This simple program is only for explanation purposes and if we took count of the number of trials in which the function find the searched value it will be the number of numbers before the searched values. Not really the more convenient way to search. And now, for something completely different, I introduce a friend of mine...
+The ls function, responsible for the search, is really straightforward, and maybe a little stupid. It scans the numbers of an array one after the other, and make a comparison. If the check is a successfull comparison, linear search returns the index of the first searched value in the array, otherwise, if the end of the array is reached, a main convention for the searching function suggest to return a -1, that is equivalent to say: "i have not found the value".
+This simple program is only for explanation purposes and if we took count of the number of trials in which the function find the searched value it will be the number of elements before the searched values. Not really the more convenient way to search. And now, for something completely different, I introduce a friend of mine...
 
-#### **binary search**
+#### **Binary search**
 
-code first
+Code first
 
 ```python
 def bs(ar,val):
@@ -203,31 +203,31 @@ def bs(ar,val):
 			lower = mid + 1
 	return -1
 ```
-Now that you understand the main point I omit the code in which, simply, I try to execute the code to see that it works
-and i give you only the function.
-The code is simply: assumed that the array in which i have to search for a particular value is ordered (this is essential) i try the value in the middle. If this is the searched value the function returns the index, otherwise, if the value is greater, the function can eliminate all the values on the right and now doesn't have to examine all the values but only the values on the left.
+Now that you understand the point I omit the code in the main function in which, simply, I try to execute the code to see that it works
+and I give you only the function code.
+The code is simply: assumed that the array in which I have to search for a particular value is ordered (this is essential) i try the value in the middle. If this is the searched value the function returns the index, otherwise, if the value is greater, the function can eliminate all the values on the right and now doesn't have to examine all the values but only the values on the left.
 If the value is lesser this means that the value searched is in the right part of the array.
-The function continues until the lower value, from which starting the search is greater than the upper value. In that case the while is interrupted and -1 is returned, because the value isn' t in the array.
-To make an example, suppose we want to search if the array [1,2,3,4,5,6,7,8,9,10] has the value 3.
+The function continues until the lower value, from which the search starts is greater than the upper value. In that case the while is interrupted and -1 is returned, because the value isn' t in the array.
+To make an example, suppose we want to search if the array [1,2,3,4,5,6,7,8,9,10] contains the value 3.
 We start with a lower index of 0 and and upper index of 9.
-The index in the middle is = 4 and the value at that index is 5. The searched value is 3, lesser than 5, so wen can eliminate all the numbers on the right, 5 included.
+The index in the middle is 4 and the value at that index is 5. The searched value is 3, lesser than 5, so wen can eliminate all the numbers on the right, 5 included.
 So the array now is this [1,2,3,4,~~5,6,7,8,9,10~~] and the upper bound become 3. The middle point now is 1, which value is 2, less than 3, so we can eliminate the left side [~~1,2~~,3,4]. Now the lower index is 2 and the upper is 3. Middle point index is 2 and the value is 3, and this is the answer to our question. The searched element exists and the index in the array is 2.
 
 <span id="prob"></span>
 #### **Likelyhood of winning**
 Why all these considerations matters in this simple game?
 The answer is that, in the way the game is considered, is important not to have a big number of trials, because after a certain value, if the player applies binary search, is matematically sure that he'll guess the number.
-So the number of trials are established in a range under the mathematical certainty. It would be nice if the likelywood would be something near 50%, so how we can decide the number of trials?
+So the number of trials are established in a range under the mathematical certainty. It would be nice if the likelywood would be something near 50%, so how can we decide the number of trials?
 If we have numbers from 1 to 10, and we have to guess a number, is 3 a good amount of trials?
 3 is integer part of the base 2 logarithm of 10. What if I give the player 5 trials. If the player applies binary search, with 5 trials, cannot lose. In fact, with the first guess, if wrong, remain 5 numbers to guess. Than, with the second guess, if wrong, remain 2 numbers to guess and 3 other trial. Math clearly says that the player wins. If we limited the number of trials to 3, after 2 trials we remain with 2 numbers and, at that point, the probability is 50% to guess.
 Ok, it sounds nice, but is there another proof that our argomentation is right? Because we are walking in the forest of programming let's try an answer with a monte carlo method.
 
 <span id="mc"></span>
-#### **how to compute with monte carlo method**
+#### **How to compute with monte carlo method**
 
-What' s a monte carlo method? To stay at our example, we want to compute a probability but, may be we are not so confident in math, or maybe we are but we want a counterproof also. So we can write a little program that is basically a simulation. Instead of playing only one game our simulation can play 100000 games in a row, and can do these multiple times. If every time the program run 1000000 simulations the results is near the other result we have choosen a sufficient enough amount of repetitions. If the results are really far one from the other, maybe randomness still plays a huge role. To eliminate this component we have to increase the number of games, until, with a sufficient amount, randomness is cut off from the equation. It's the same with a coin toss. If we throw the coin 10 times, the result may be unpredictable, but if we throws the coin 100000 times, the percentage of times the throw gives you a head will be something near 50%.
-Monte Carlo method is really a fascinating method and can be used to compute hard to figure out probability. For example: do you know the monty hall problem? You can choose between three envelope. In one of them you can win a car, in the others two you win nothing. After you have choosen an envelope a person show you the content of one of the others two envelope that doesn' t contain the car.Is it more convenient for you to change your choice or to remain with the initial envelope?
-This is not a difficult question, but it is tricky and if you have not thought about it, a common sense reasoning will probably lead you to a wrong conclusion. The point is that, with a monte carlo simulation, you can easily figure out the right answer, and writing the code for this is really simple (maybe is a good exercise for the reader). I like when code helps to answer to real world problems :-)
+What' s a monte carlo method? To stay at our example, we want to compute a probability but, may be we are not so confident in math, or maybe we are but we want a counterproof also. So we can write a little program that is basically a simulation. Instead of playing only one game our simulation can play 100000 games in a row, and can do these multiple times. If every time the program run 100000 simulations the results is near the other results we have choosen a sufficient enough amount of repetitions. If the results are really far one from the other, maybe randomness still plays a huge role. To eliminate this component we have to increase the number of games, until, with a sufficient amount, randomness is cut off from the equation. It's the same with a coin toss. If we throw the coin 10 times, the result may be unpredictable, but if we throws the coin 100000 times, the percentage of times the throw gives you a head will be something near 50%.
+Monte Carlo method is really a fascinating method and can be used to compute hard to figure out probability. For example: do you know the monty hall problem? You can choose between three envelope. In one of them you win a car, in the others two you win nothing. After you have choosen an envelope a person show you the content of one of the others two envelope that doesn' t contain the car.Is it more convenient for you to change your choice or to remain with the initial envelope?
+This is not a difficult question, but it' s a tricky one and, if you have not thought about it, a common sense reasoning will probably lead you to a wrong conclusion. The point is that, with a monte carlo simulation, you can easily figure out the right answer, and writing the code for this is really simple (maybe is a good exercise for the reader). I like when code helps to answer to real world problems :-)
 So, without further ado, here it is the code for the monte carlo simulation for our problem.
 
 ```python
@@ -271,54 +271,55 @@ if __name__ == '__main__':
 	main()
 ```
 If you try to run this code you will see that you win with a probability of 62, 63% in which of the 20 simulation. For each simulation you play 100000 games and the results are almost identical, so i can trust these results. This means that if you have to guess a number between 1 and 100, 6 is a good amount of trials. What if the game gives you only 5 trials. The beauty of this method is that, now, we can modify the constant  at the top of the program and immediately see the result. 30% of success, in my opinion too low. So, let's try with 7. 100% of success. Ok, in this case, is too much. So a perfect balance will be 6 trials.
-Remember that the assumption is that the player is using the best possible strategy to guess the number which is binary search.
+Remember that the assumption is that the player is using the best possible strategy to guess the number, which is binary search.
 Let's do a last experimentation: what if we modify the max number to be 128. The integer part of the base 2 logarithm of 128 is 7 and, if you run your simulations you see that you win 100 times out of 100.
-Why? The answer is simple: 128 is an exact power of 2. So the logarithm will be the exact number of times you have to divide the numbers until you reach the only possible solution. The things are different, for example, with the max number equals to 100 because the base 2 log of 100 is 6,64... which is rounded to 6 by the // python operator (an integer division).
+Why? The answer is simple: 128 is an exact power of 2. So the logarithm will be the exact number of times you have to divide the numbers until you reach the only possible solution. Except if yu guess before because the secret number is an exact division of a portion pf the left numbers. The things are different, for example, with the max number equals to 100 because the base 2 log of 100 is 6,64... which is rounded to 6 by the // python operator (an integer division).
 So the numbers of trials aren't enough to have a mathematical probability of the 100%. If this is a bug in your game and you have to calculate the number of trials in a different way or a reward to the smart enough player who choose, for the max, an exact power of two, is your decision. In my opinion, the only thing to say is this: "It's not a bug, it's a feature" 
 
 <span id="complex"></span>
 ### **How much does it cost? Alghorithms complexity**
 
 What the hell is this section? It concerns a very important topic in computer science: performance, but don't be too scaried, is not a very formal approach.
-What is the complexity of an algorithm? The simpler way to explain is thinking how much time the algorithm need to run and how this time is related to the input of the algorithm. There are other measures of the complexity (space is an example), but for our purposes we limit our consideration to the time complexity.
+What is the complexity of an algorithm? The simpler way to explain is thinking how much time the algorithm needs to run and how this time is related to the input of the algorithm. There are other measures of the complexity (space is an example), but for our purposes we limit our considerations to time complexity.
 So the question of the questions: how do we measure this time complexity of an algorithm?
 
 <span id="compute"></span>
-#### **compute complexity**
+#### **Compute complexity**
 
-Let' s start with a simple statement: to compute the complexity of an algorithm we must count the numbers of operation the algorithm need to do to accomplish the task.
-Yes but... what about the time? Is irrelevant. What? Yes, the only important thing is the number of operations. So let' s do an example: if we have an array and, for each element we print its value, we have an operation for every element of the array. With an array of n elements we have n operations, k with an array of k elements.
+Let' s start with a simple statement: to compute the complexity of an algorithm we must count the numbers of operations the algorithm need to do to accomplish the task.
+Yes but... what about the time? Is irrelevant. What? Yes, the only important thing is the number of operations. So let' s do an example: if we have an array and, for each element we print the value, we have an operation for every element of the array. With an array of n elements we have n operations, k with an array of k elements.
 The important thing is that, if you increase the size of your input, the time of the array will increase in a linear proportional way. So doubling the size of the array will result in a double time to finish.
-To be just a little bit more formal we can say that the time complexity of the algorithm is n (is linear) and we write     O(n), read as big o of n.
-What if i tell you that the difference between linear search and binary search is that, if i double the input, one doubles its time complexity while the other increment by one the number of operations, so that this size increasing is almost irrelevant.  
+To be just a little bit more formal we can say that the time complexity of the algorithm is n (is linear) and we write **O(n)**, read as big o of n.
+What if I tell you that the difference between linear search and binary search is that, if I double the input, linear search doubles its time complexity while the other increment by one the number of operations, so that for the last doubling the size of the input is almost irrelevant.  
 
 
 <span id="diff"></span>
 #### **Differences between linear search and binary search**
- Yes, this is precisely our difference: linear search is O(n), while binary search is O(log n).
- Let' s do an example: imagine you write an algorithm that search is a friend is present in the facebook archive. To search for your friend you use linear search. Facebook, now at the very beginning of its life, is composed of 100 users. You need to do, in the worst case (if your friend is the last or if is not present), 100 operations. If the pc you use has the capability to do 1000 operations in a second, your algorithm will spend a tenth of a second to give you the answer. If your implementation change, and you switch to binary search, the number of operations become 7, and the time is now, for sake of semplicity, a thousandth of second, so 100 times smaller.
+ Yes, this is precisely our difference: linear search is **O(n)**, while binary search is **O(log n)**.
+ Let' s do an example: imagine you write an algorithm that searchs if a friend is present in the facebook archive. To search for your friend you use linear search. Facebook, now, at the very beginning of its life, is composed of 100 users. You need to do, in the worst case (if your friend is the last or if is not present), 100 operations. If the pc you use has the capability to do 1000 operations in a second, your algorithm will spend a tenth of a second to give you the answer. If your implementation change, and you switch to binary search, the number of operations become 7, and the time is now, for sake of semplicity, a thousandth of second, so 100 times smaller.
  Now you think carefully about this and because linear search is really easy to implement and not error prone as binary search is, you decide to keep the one with the linear search implementation.
- The difference between the tow is really not that big. 
- A year later you want to repeat this search: maybe my friend has subscribed facebook now. The users, now, are a million.
+ The difference between the two is really not that big. 
+ A year later you want to repeat this search: maybe my friend has subscribed to facebook now. The users, now, are a million.
  Wow, a huge increase. So my algorithm need a million/1000 seconds. To have an answer i have to wait for 17 minutes. With binary search, the number of operations needed are log2(1000000) = 19, so we are still under a second.
- The point is that, for small numbers, the two algorithms are both good, but for big numbers there's a huge difference. The other key point is this: with 100 users the difference between the tow is 1 to 100.
- But with a million users the difference has no more this proportion. Is more 1000000 to 1. So the performance ratio between the two algorithm is not constant, increase as the input number become bigger.
+ The point is that, for small numbers, the two algorithms are both good, but for big numbers there's a huge difference. The other key point is this: with 100 users the difference between the two is 1 to 100, in terms of time.
+ But with a million users the difference has a proportion like 1000000 to 1. So the performance ratio between the two algorithm is not constant, increase as the input becomes bigger.
+ In my opinion these are the main considerations about time complexity, but obviously this isn't a very formal and detailed introduction.To Have better and really clear explanations you can read [1](#one) or [3](#three).
 
  <span id="order"></span>
 
  ### **The importance of being ordered**
 
- Now, considering that this is a free digression on topics related to our simple game implementation in python, i think it's time to consider a very important one: order. All discussions made until now, and even our game, is based on the fact that the number i'm searching for is in an ordered list of numbers. The dictionary can be searched in an effective way because is ordered: but what about an unordered list of things? Well, you simply can't make a good search. You have to deal with the one by one kind of searching we told speaking of linear search.
+ Now, considering that this is a free digression on topics related to our simple game implementation in python, i think it's time to consider a very important one: order. All discussions until now, and even our game, are based on the fact that the number I'm searching for is in an ordered list of numbers. The dictionary can be searched in an effective way because is ordered: but what about an unordered list of things? Well, you simply can't make a good search. You have to deal with the "one by one" kind of searching we told speaking of linear search.
  Don't be too desperate because there's a family of useful algorithms with the purpose of ordering a list of things, given an ordering criterium.
  The simplest one is the <. A number a is before a number b if a < b. That's all.
  We stick with this, but other criteria, like lexycographical, are possible.
 
 <span id="sort"></span>
  #### **Sorting algorithms**
-As we told few lines ago there are a bunch of algorithms to make order in an unordered collections of any kind of types. The classic example is an array of unordered integers. A good one would be [1,7,3,2,9,4,10,5]. A sorting algorithm will receive this array or list as argument and will return a new array [1,2,3,4,5,7,9,10]
+As we told few lines ago there are a bunch of algorithms to make order in an unordered collection of any kind. The classic example is an array of unordered integers. A good one would be [1,7,3,2,9,4,10,5]. A sorting algorithm will receive this array or list as argument and will return a new array [1,2,3,4,5,7,9,10]
 Sorting algorithms are perhaps the most classical example in the realm of algorithms and there are really a lot of this kind. To mention only a few: bubble sort, selection sort, insertion sort,merge sort, quick sort, heap sort.
-There are difference between them, tipically related to the time complexity (the big O thing), so one is better than others. Bubble sort has a complexity of O(n^2), so is not a suitable choice if you must order a big array.
-In this case may be merge sort is a better choice. In addition some implementations are clearer and more straightforward than others. So, to keep things simple, i chose 2 algorithms of different time complexity and with an easy implementation: selection sort and quick sort.
+There are difference between them, tipically related to the time complexity (the big O thing), so one is better than another. Bubble sort has a complexity of O(n^2), so is not a suitable choice if you must order a big array.
+In this case may be merge sort is a better choice. In addition some implementations are clearer and more straightforward than others. So, to keep things simple, I choose 2 algorithms of different time complexity and with an easy implementation: selection sort and quick sort.
 Let's begin with the first one.
 
 
@@ -359,21 +360,20 @@ def selection_sort(l):
 ```
 In the first function, find_min_index, the top part between """""" is a documentation string. It tells us what the function does and its parameters.
 In selection sort, first of all, we make a copy, so the originally array is safe. Otherwise ordering the list will also modifiy the original and may be this is not the intended behaviour.
-Then, for every element of the list create a sublist with all the element on the right of the actual element, which is included. In this new_list the min el is searched and then the funcion makes a swap between the actual element and the min one in the new sub_list. At the end of this loop ordered_list is really ordered and can be returned from the function.
+Then, for each element of the list, it creates a sublist with all the element on the right of the actual element, which is included. In this new_list the min el is searched and then the funcion makes a swap between the actual element and the min one in the new sub_list. At the end of this loop ordered_list is really ordered and can be returned from the function.
 
 <span id="quicksort"></span>
 #### **Quick sort**
 
-Quick sort is one of my favourite algorithms. May be you feel strange in listening to me sayng I have a preference about a specific algorithm, but this is how the world goes, at least for a software developer.
-There are good reasons to love quick sort. It's a linear, simple and pretty fast algorithm. Here, there's the code.
-
-from random import randint
+Quick sort is one of my favourite algorithms. May be you feel strange in listening to me saying I have a preference about a specific algorithm, but this is how the world goes, at least for a software developer.
+There are good reasons to love quick sort. It's a linear, simple and pretty fast algorithm. Here the code.
 
 ```python
+from random import randint
+
 def quick_sort(l):
 	"""
 		Sort a given list
-		
 		@input l list to order
 	"""
 	if len(l) <= 1:
@@ -392,18 +392,18 @@ def quick_sort(l):
 	return quick_sort(smaller) + [pivot] + quick_sort(greater)
 ```
 
-I hope you really feel is a beautiful algorithm and is not my implementation, is the algorithm itself. The logic is straightforward. If the input list is empty, or is a single element list, the function return the list given as input. In fact, with such a list, you don't have to make order. This is the base case. Otherwise, if the list is at least two elements, you pick a random element from the list and create two new list. The first with the values smaller or equal to the random element, called the pivot. You must pay attention to include all the values equals to the pivot, that are not the pivot. Otherwise you could loss an eventual repetition.
-The other list is composed by the numbers whose value are greater than the pivot.
-Choosing the pivot by picking a random index is a good strategy, because prevent you from going in the worst case if, for example, the list is already ordered and you choose ever the first element to be the pivot.
+I hope you really feel is a beautiful algorithm and is not my implementation, is the algorithm itself. The logic is straightforward. If the input list is empty, or is a single element list, the function returns the list given as input. In fact, with such a list, you don't have to make order. This is the base case. Otherwise, if the list is at least two elements, you pick a random element from the list and create two new lists. The first with the values smaller or equal to the random element, called the pivot. You must pay attention to include all the values equals to the pivot, that are not the pivot. Otherwise you could lose an eventual repetition of the pivot's value.
+The other list is composed by the numbers whose values are greater than the pivot.
+Choosing the pivot by picking a random index is a good strategy, because prevent you from going in the worst case if, for example, the list is already ordered and you choose every time the first element to be the pivot.
 At the very last of the function, the return statement, concatenate 3 list. Except for the one composed by the pivot only (be sure to include the pivot in square bracket), the other two aren't simply returned as they are but is returned the result of calling the quick_sort function on the list itself.
-So, to bi clear, is not smaller that it's returned, but quick_sort(smaller). It' s a recursive call.
+So, to be clear, is not smaller that it's returned, but quick_sort(smaller). It' s a recursive call.
 We can be sure that is not a infinite loop because, at the top of the function, our base case return without calling itself.
 
 <span id="oneliners"></span>
 #### **Wow, only in one line**
 
-Now, it's time for something completely different. Python is a fun language, in which you can have fun in really creative and unpredictable ways. For me the fun may come from a challenge: rewrite some of the program used before in only one line. And now, you should ask:" Wow, only in one line?". Yes! Isn't amazing?
-Yes, it is, but beware, i dont' recommend this programming style. The code is not much maintenable, and if you must change something often is a pain. Is only a way to have fun and master better python which is, in itself, a very fun thing.
+Now, it's time for something completely different. Python is a fun language, in which you can have fun in really creative and unpredictable ways. For me the fun may come from a challenge: rewrite some of the program used before in only one line. And now, you should ask:" Wow, only in one line?". Yes! Isn't it amazing?
+Yes, it is, but beware, I dont' recommend this programming style. The code is not much maintenable, and if you must change something often is a pain. It's only a way to have fun and master python better which is, in itself, a very fun thing.
 Let's start with the first program.
 
 <span id="bsoneline"></span>
@@ -425,8 +425,8 @@ def bs(lista,search_value,low,high):
 ```
 The difference is that, now, the logic is recursive, and you pass the low and high index as parameters of the function.
 At the very top there's the base case. If the indexes passed as arguments are crossed (low index is greater than high index) this means the searched element is not in the list, and the function returns -1, as before.
-Now, let's make together a step towarsd oneliner code.
-For this, is important to understand a one line statement to handle if and else. In a return, or assigning a value to a variable, instead of writing an indented piece of code, you car wirte a one line statement. 
+Now, let's make together a step towards oneline code.
+For this, is important to understand a one line statement to handle if and else. In a return, or assigning a value to a variable, instead of writing an indented piece of code, you car write a one line statement. 
 
 ```python
 	## usual way
@@ -450,16 +450,15 @@ def bs(lista,search_value,low,high):
 	return mid if lista[mid] == search_value else (bs(lista,search_value,low,mid-1) if 	lista[mid] > search_value else bs(lista,search_value,mid+1,high)) 
 ```
 
-The previous if, elif, else multi rows statement has been translated in a single row. Pretty concise but, as you easily see, not really a readable piece of code. This is why i don't recommend this style except for entertainment purposes.
-So, with this purposes in mind, let's continue. Ready? Sure? Really? Ok, you wanted it.
-Take this one.
+The previous if, elif, else multi rows statement has been translated in a single row. Pretty concise but, as you easily see, not really a readable piece of code. This is why I don't recommend this style except for entertainment purposes, or for tiny pieces of code like assignments.
+So, with this purposes in mind, let's continue. Ready? Sure? Really? Ok, your fault, not mine.
 
 ```python
 def bs(lista,search_value,low,high):
 	return -1 if low > high else ((low + ((high-low)//2)) if lista[low + ((high-low)//2)] == search_value else (bs(lista,search_value,low,(low + ((high-low)//2))-1) if 	lista[low + ((high-low)//2)] > search_value else bs(lista,search_value,(low + ((high-low)//2))+1,high)))
 ```
 
-If you see more than one line i assure you that is only for visualization. This is a one line piece of code but... wait a minute. You are a liar. What about the line with def bs...:?
+If you see more than one line I assure you that is only for visualization. This is a one line piece of code but... wait a minute. You are a liar. What about the line with def bs...:?
 May be you don't believe me, but i can shrink also that line. I need only a new concept: lambda function.
 Lambda function is a way to create an anonymous function on the fly. The simplest explanation is this. If you must declare a fuction, instead of doing this:
 ```python
@@ -480,12 +479,39 @@ bs = lambda lista,search_value,low,high: -1 if low > high else ((low + ((high-lo
 ```
 Wonderful!
 
+<span id="qsoneline"></span>
+#### **Quick sort**
 
+This is the last paragraph of our article and, I think, is the apex of all the code. Not only we deal with quick sort, and you now agree with me is the best ever possible algorithm, but we also car write the code for this in one line. I'm really excited, aren't you?
+I need only a concept before proceeding, list comprehension. 
+Suppose, in quick sort, you have a list and you iterate over this list to create a new smaller list, with the values smaller than the pivot.
+The traditional way is this:
+```python
+    smaller = []
+	for el in original_list:
+		if el <= pivot:
+			smaller.append(el)
+```
+With list comprehension, you can do this:
+```python
+smaller = [el for el in original_list if el <= pivot]
+```
+In only one line you can achieve the same result.
+It's a great python feature and you can read a lot about this online.
+So, for the last piece of code, the beautiful one line quick sort:
+
+```python
+qs = lambda l:qs([el for el in l[1:] if el <= l[0]]) + [l[0]] + qs([el for el in l[1:] if el > l[0]]) if l else []
+```
+Beautifuuuuul!
+The only warning is that, for pragmatic reason, I don't picka random index for the pivot and I choose the first element of the list, which don't prevent the case in which the list is already ordered and the smaller list is empty every time. But is a price I'm ready to pay fo this beatiful code.
+Consider where we are and we have only analyzed a very simple game implementation.
+Good programming my friends, and have fun.
 
 <span id="bib"></span>
 ### **Inspiring**   [back to top](#top)
-- *Grokking algorithms, Aditya Y. Bhargava, Manning 2016*
-- *Python oneliners, Christian Mayer, No starch press 2020*
-- *A common sense guide to data structure and alghoritms, Jay Wengrow, Pragmatic bookshelf 2020*
-- *The big book of small python projects, Al Sweigart, No starch press 2021*
-- *Tiny python projects, Ken Youens-Clark, Manning 2020* 
+1. <span id="one">*Grokking algorithms, Aditya Y. Bhargava, Manning 2016*</span>
+2. *Python oneliners, Christian Mayer, No starch press 2020*
+3. <span id="three">*A common sense guide to data structure and alghoritms, Jay Wengrow, Pragmatic bookshelf 2020*</span>
+4. *The big book of small python projects, Al Sweigart, No starch press 2021*
+5. *Tiny python projects, Ken Youens-Clark, Manning 2020* 
